@@ -8,19 +8,20 @@
 
 using namespace std;
 
-
-class board_dnode{
+//  DOUBLE LINKED NODE -- THIS CLASS ALSO DOES FUNCTION OF INITIALIZING EMPTY NODE
+class board_node{
 
     public:
-        board_dnode(){
+        board_node(){
             piece = ' ';
+            coordinate = ' TEST ';
             next_pointer = nullptr;
             previous_pointer = nullptr;
         }
 
-    private:
-        string piece;
-        
-        board_dnode *next_pointer, *previous_pointer;
-};
+        string node_get_coordinate() { return coordinate; }
 
+    private:
+        string piece, coordinate;
+        board_node *next_pointer, *previous_pointer;
+};

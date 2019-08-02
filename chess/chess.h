@@ -29,11 +29,15 @@ class chess : public game{
       bool is_legal(const std::string& move);
       void make_move(const std::string& move);
 
+      // NEW CHESS BOARD ACCESSOR FUCNTIONS -- STARTED 8/1/2019
+      string get_coordinate() { return board_space ->node_get_coordinate(); }  
+
       void test(std::ostream &outs);
 
       int move_counter;
 
     private:
-      board_dnode board_space;
+      board_node *board_space;
 };
-std::ostream &operator<<(std::ostream &outs, piece &p);
+
+std::ostream &operator<<(std::ostream &outs, string &piece);

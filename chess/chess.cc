@@ -17,88 +17,21 @@ piece::piece(){
 }
  */
 
-checkers::checkers(){
+chess::chess(){
 
-    move_counter = 0;
+    //SPACE_COUNT -- FOR WHILE LOOP CONTROL; COUNTS HOW MANY BAORD SPACES MADE
+    int space_count = 0;
 
-    for (int i = 0; i < 3; i++){
+    while(space_count < 65){
 
-        for (int j = 0; j < 8; j++){
+        std::cout << get_coordinate();
 
-            if (i == 0 || i == 2){//maybe don't mod by zero?
-
-                if(j % 2 == 0){
-
-                    board[i][j].empty = true;
-                }else{
-
-                    //board[i][j].empty = false;
-                    board[i][j].black = true;
-                }
-
-            }else{
-
-              if(j % 2 == 0){
-
-                  //board[i][j].empty = false;
-                  board[i][j].black = true;
-              }else{
-
-                  board[i][j].empty = true;
-              }
-            }
-        }
-    }
-
-    for (int i = 3; i < 5; i++){
-
-        for (int j = 0; j < 8; j++){
-
-            if(i == 3){
-
-                if(j % 2 != 0){
-
-                    board[i][j].empty = true;
-                }
-            }else{
-
-                if(j % 2 == 0){
-
-                    board[i][j].empty = true;
-                }
-            }
-        }
-    }
-
-    for (int i = 5; i < 8; i++){
-
-        for (int j = 0; j < 8; j++){
-
-            if(i == 5 || i == 7){
-
-                if(j % 2 == 0){
-
-                    board[i][j].white = true;
-
-                }else{
-
-                    board[i][j].empty = true;
-                }
-
-            }else{
-
-                if(j % 2 == 0){
-
-                    board[i][j].empty = true;
-                }else{
-
-                    board[i][j].white = true;
-                }
-            }
-        }
+        space_count++;
     }
 }
 
+
+/* 
 void checkers::test(std::ostream &outs){
 
         for (int i = 3; i < 5; i++){
@@ -134,6 +67,8 @@ ostream& operator <<(ostream& outs, piece& p){
 //╚═╝╚══════╝    ╚══════╝╚══════╝ ╚
 */
 
+
+/* 
 bool checkers::is_legal(const std::string& move){//use mod % move number to find if
        
                                                 //computer or human is moving
@@ -910,8 +845,10 @@ bool checkers::is_legal(const std::string& move){//use mod % move number to find
       
 }
 }
+*/
 
 
+/*
 //function which moves a piece
 void checkers::make_move(const std::string& move){
 
@@ -1263,9 +1200,10 @@ void checkers::make_move(const std::string& move){
 
     move_counter++;
     cout << endl << "Moves: " << move_counter << endl   ;
+} */
 
-}
 
+/*
 void checkers::display_status(){
 
     bool computers_turn = 0;
@@ -1340,4 +1278,4 @@ void checkers::display_status(){
     cout << endl << "ONLY USE CAPS  -  BLACK MOVES FIRST";
     cout<< endl;
 }
-
+*/
