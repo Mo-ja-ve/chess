@@ -33,12 +33,9 @@ namespace main_savitch_14
 	    else
 	    make_computer_move( );
 	}
-	display_status( );
+	display_status();
 	return winning(); 
     }
-
-
-    
     //*************************************************************************
     // OPTIONAL VIRTUAL FUNCTIONS (overriding these functions is optional)
 
@@ -111,7 +108,7 @@ namespace main_savitch_14
 	    {
 		best_value = value;
 	    }
-	    moves.pop( );
+	    moves.pop();
     	}
 
     	// The value was calculated from the opponent's perspective.
@@ -166,5 +163,3 @@ namespace main_savitch_14
     }
 
 }
-
-	

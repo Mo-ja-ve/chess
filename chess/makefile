@@ -9,3 +9,6 @@ chess.o: game.h board_node.h
 
 gameb.o: game.h
 	g++ -c *.cc
+
+clean:
+	rm *.o
