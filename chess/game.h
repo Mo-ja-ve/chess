@@ -30,16 +30,28 @@ namespace main_savitch_14
 	// *******************************************************************
 	// OPTIONAL VIRTUAL FUNCTIONS (overriding these is optional)
 	// *******************************************************************
+
+	//********************************************************************
+	// ANDRIYS NOTE:
+	// I removed const at the end of the function get_user_move after (), and added { } after ()
+	//********************************************************************
 	virtual void display_message(const std::string& message) const;
-    	virtual std::string get_user_move( ) const;
+    
+	virtual std::string get_user_move( ) const;
+
 	virtual who last_mover( ) const
 	    { return (move_number % 2 == 1 ? HUMAN : COMPUTER); }
-	virtual int moves_completed( ) const { return move_number; }
+
+	virtual int moves_completed( ) const 
+		{ return move_number; }
+
 	virtual who next_mover( ) const
 	    { return (move_number % 2 == 0 ? HUMAN : COMPUTER); }
+
 	virtual who opposite(who player) const
 	    { return (player == HUMAN) ? COMPUTER : HUMAN; }
-    	  virtual who winning( );
+
+    virtual who winning( );
 
 	// *******************************************************************
 	// VIRTUAL FUNCTIONS THAT MUST BE OVERRIDDEND:

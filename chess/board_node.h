@@ -6,6 +6,7 @@
 
 #include <iostream>
 
+using namespace main_savitch_14;
 using namespace std;
 
 //  DOUBLE LINKED NODE -- THIS CLASS ALSO DOES FUNCTION OF INITIALIZING EMPTY NODE
@@ -14,7 +15,7 @@ class board_node{
     public:
         board_node(){
             piece = ' ';
-            coordinate = ' TEST ';
+            coordinate = "TEST";
             next_pointer = nullptr;
             previous_pointer = nullptr;
         }
