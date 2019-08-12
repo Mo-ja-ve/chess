@@ -64,9 +64,6 @@ namespace main_savitch_14
 	else
 	    return NEUTRAL;
     }
-
-
-
     //*************************************************************************
     // PRIVATE FUNCTIONS (these are the same for every game)
 

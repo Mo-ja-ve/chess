@@ -20,29 +20,45 @@ piece::piece(){
 chess::chess(){
 
     //SPACE_COUNT -- FOR WHILE LOOP CONTROL; COUNTS HOW MANY BAORD SPACES MADE
-    int space_count = 0;
+    int space_count = 1;
+    char x = 'A'; char y = 0;
 
+    board_node *first_space = new board_node();
+    board_node *current_space;
+    //current_space = frist_space, sets current_space to have the same address as first_space
+    current_space = first_space;
+    // SPWANS BOARD
     while(space_count < 65){
-
-        std::cout << get_coordinate();
-
+        current_space->set_next(new board_node());
+        current_space = current_space->next();
         space_count++;
+    }
+
+    current_space = first_space;
+
+    while(current_space != NULL){
+        current_space->set_coordinate(x,y);
+        current_space = current_space->next();
+        x++;
+        if (x=='I') { x = 'A'; y++; }
+    }
+
+}
+
+void chess::test(){
+
+    board_node *current = first_space;
+    int count = 0;
+    while(current != NULL){
+        cout<<"node number: "<<count<<" coordinates: ";
+        current->print();
+        cout << endl;
+        current = current->next();
+        count++;
     }
 }
 
-
 /* 
-void checkers::test(std::ostream &outs){
-
-        for (int i = 3; i < 5; i++){
-
-            for (int j = 0; j < 8; j++){
-
-                cout << board[i][j] << endl;
-            }
-        }
-}
-
 void piece::output(std::ostream& outs){
 
     outs << "empty: " << empty << endl;

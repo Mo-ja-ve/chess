@@ -9,12 +9,11 @@ winner.
 using namespace std;
 using namespace main_savitch_14;
 
-
 int main(){
     
 	chess mygame;
 	game::who winner;
-	mygame.play();
+	mygame.test();
 /*	
 	if (winner == game::HUMAN)
 		std::cout<<"Player 1 Wins";

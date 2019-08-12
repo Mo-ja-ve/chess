@@ -30,16 +30,14 @@ class chess : public game{
       //void make_move(const std::string& move);
 
       // NEW CHESS BOARD ACCESSOR FUCNTIONS -- STARTED 8/1/2019
-      string get_coordinate() { return board_space ->node_get_coordinate(); }  
+      //char get_coordinate() { return board_space ->node_get_coordinate(); }  
 
-      //void test(std::ostream &outs);
+      void test();
 
       int move_counter;
 
       //game::who winning()const;
 
     private:
-      board_node *board_space;
+      board_node *first_space;
 };
-
-std::ostream &operator<<(std::ostream &outs, string &piece);
