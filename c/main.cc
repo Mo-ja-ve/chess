@@ -94,10 +94,47 @@ typedef struct board_type
 
 } board;
 
-
+//expects an initialized board (all spaces populated)
 void reset_pieces(board &b)
+{//put all the pieces in their initial locations
+
+  // WHITE SIDE    WHITE SQUARES             BLACK SQUARES
+  // ROOK | KNIGHT | BISHOP_C | KING | QUEEN | BISHOP_F | KNIGHT_G | ROOK
+
+  // PAWNS
+
+  // 4 EMPTY ROWS
+
+  // PAWNS
+
+  // BLACK SIDE    BLACK SQUARES             WHITE SQUARES
+  // ROOK | KNIGHT | BISHOP_C | KING | QUEEN | BISHOP_F | KNIGHT_G | ROOK
+
+
+
+
+}
+
+//GET A NEW BOARD
+board get_a_board()
 {
-  //put all the pieces in their initial locations
+  board temp;
+
+  temp.A1_ptr = new board_node();
+
+  set_dimension(temp->A1_ptr, 0, 0);   //A1 is (x, y) = (0, 0)
+
+  for(unsigned char x = 0; x < 8; x++ )
+  {
+    for(unsigned char y = 0; y < 8; y++ )
+    {
+
+    }
+  }
+
+  reset_pieces(temp);
+
+  return temp;
 }
 
 
@@ -108,37 +145,17 @@ void reset_pieces(board &b)
 
 
 
+
+
+//MAIN
 int main(int argc, char const *argv[]) {
 
-  // board_node current_space;
 
-  // current_space.x = 5;
-  // current_space.y = 3;
+  board b = get_a_board();
 
-  board b;
-
-  board_node * A1_ptr = new board_node();
-
-  b.A1_ptr = A1_ptr;
-
-  // std::cout << "the current space is ";
-  // std::cout << A1_ptr->x << " ";
-  // std::cout << A1_ptr->y << std::endl;
-
-  set_dimension(*A1_ptr, 0, 0);   //A1 is (x, y) = (0, 0)
-
-  board_node * current_space;
-  current_space = A1_ptr;
+  cout << b.A1_ptr->
 
 
-
-  for(unsigned char x = 0; x < 8; x++ )
-  {
-    for(unsigned char y = 0; y < 8; y++ )
-    {
-
-    }
-  }
 
 
 
