@@ -477,22 +477,65 @@ void print(board b)
   }
 
 
-  std::cout << std::endl;
+  std::cout << std::endl << RESET;
+
+  switch (b.state) {
+
+    case WHITE_TURN:
+      std::cout << "    ";
+      std::cout << B_WHITE << T_BLACK;
+      std::cout <<  "    IT\'S WHITE\'S TURN   ";
+      break;
+    case BLACK_TURN:
+
+      std::cout << "    ";
+      std::cout << B_BLACK << T_WHITE;
+      std::cout <<  "    IT\'S BLACK\'S TURN   ";
+      break;
+
+    case WHITE_VICTORY:
+      std::cout << "            ";
+      std::cout << T_BLACK << B_WHITE;
+      std::cout << "     WHITE WINS  ";
+      break;
+
+    case BLACK_VICTORY:
+
+      std::cout << "            ";
+      std::cout << T_WHITE << B_BLACK;
+      std::cout << "     BLACK WINS  ";
+      break;
 
 
-  std::cout << "BLACK SCORE: ";
+    case STALEMATE:
+        std::cout << "            ";
+        std::cout << T_RED << B_BLUE;
+        std::cout << "     STALEMATE  ";
+      break;//maybe do a win by points thing
+
+    default:
+
+      std::cout << "            ";
+      std::cout << T_RED << B_BLACK;
+      std::cout << "     SOMETHING\'S FUCKED  ";
+      break;
+  }
+
+  std::cout << RESET << std::endl;
+
+  std::cout << std::endl << " BLACK SCORE: ";
   if(b.black_score)
     std::cout << std::setw(4) << b.black_score;
   else
     std::cout << "ZERO";
-  std::cout << "         ";
+  std::cout << "    ";
 
   for(unsigned char x = 0; x < 8; x++)
   {
     cout << " " << x + 1 << " ";
   }
 
-  std::cout << "         ";
+  std::cout << "      ";
 
   std::cout << "WHITE SCORE: ";
   if(b.white_score)
@@ -509,14 +552,21 @@ void print(board b)
 
     //black graveyard (killed white pieces)
 
-    std::cout << T_MAGENTA << "    " << white_graveyeard[x].content << " ";
-    std::cout << RESET << "  ";
-
-    std::cout << T_MAGENTA << "    " << white_graveyeard[x+8].content;
-    std::cout << " " << RESET << "  ";
+    std::cout << " " << T_WHITE << B_YELLOW << "| ";
+    std::cout << RESET << " ";
 
 
-    std::cout << "   " << T_WHITE << B_YELLOW << "| ";
+    std::cout << T_MAGENTA << "  " << white_graveyeard[x].content;
+    std::cout << RESET << " ";
+
+    std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
+
+
+    std::cout << T_MAGENTA << "  " << white_graveyeard[x+8].content;
+    std::cout << " " << RESET << " ";
+
+
+    std::cout << " " << T_WHITE << B_YELLOW << "| ";
     std::cout << RESET << "   ";
 
     std::cout << RESET << (char)(65+x) << " ";
@@ -555,23 +605,34 @@ void print(board b)
 
     //white graveyard (killed black pieces)
 
-    std::cout << T_RED << "      " << black_graveyeard[x].content << " ";
-    std::cout << RESET << "  ";
+    std::cout << T_RED << "   " << black_graveyeard[x].content;
+    std::cout << RESET << " ";
+    std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
 
-    std::cout << T_RED << "    " << black_graveyeard[x+8].content;
-    std::cout << " " << RESET << "  ";
+
+
+    std::cout << T_RED << "  " << black_graveyeard[x+8].content;
+    std::cout << " " << RESET << " ";
+
+    std::cout << " " << T_WHITE << B_YELLOW << "| ";
+    std::cout << RESET << " ";
 
 
     std::cout << RESET <<std::endl;
   }
 
-  std::cout << "                          ";
+  std::cout << " " << T_WHITE << B_YELLOW << "________________ ";
+
+  std::cout << RESET <<"      ";
 
   for(unsigned char x = 0; x < 8; x++)
   {
     cout << " " << x + 1 << " ";
   }
 
-  std::cout << RESET <<std::endl;
+  std::cout << "    " << T_WHITE << B_YELLOW << "________________ ";
+
+
+  std::cout << RESET <<std::endl << std::endl;
 
 }
