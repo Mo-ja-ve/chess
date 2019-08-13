@@ -1,3 +1,5 @@
+#include <vector>
+
 
 //THE TYPE REPRESENTING THE CONTENT OF A SQUARE
 typedef enum piece_type
@@ -41,6 +43,11 @@ typedef struct board_node_type
   color square_color;
 
 } board_node;
+
+
+
+
+
 
 
 
@@ -96,8 +103,12 @@ typedef enum board_state_type
 
 
 //TO REPRESENT THE BOARD - MAKE THIS A CLASS
-typedef struct board_type
+class board
 {
+public:
+
+  board();
+
 
   board_state state; // what's going on?
 
@@ -118,13 +129,17 @@ typedef struct board_type
 
 
   //
-  int num_legal_moves;
-  _move * list_of_moves;
+  // int num_legal_moves; // not neccesary with vector
+  std::vector<_move> list_of_moves; //use push_back() to add moves
 
   board_node dead_white_guys[16];
   board_node dead_black_guys[16];
 
 
+  void print();
+  void reset_pieces();
 
 
-} board;
+
+
+};

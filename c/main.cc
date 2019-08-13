@@ -1,14 +1,15 @@
 #include <iostream>
-#include "chess.h"
+#include "chess_types.h"
 
 
 
 //MAIN
 int main(int argc, char const *argv[]) {
 
-  board b = get_a_board();
+  board b;
 
-  print(b);
+  b.print();
 
   return 0;
+  
 }
