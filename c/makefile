@@ -14,3 +14,7 @@ main.o: main.cc
 
 chess_types.o: chess_types.h chess_types.cc
 	g++ -c chess_types.cc
+
+
+clean:
+	rm *.o

@@ -4,7 +4,6 @@
 #include <iostream>
 #include <iomanip>
 
-#include <vector>
 
 #ifndef CHESS_TYPES_H
 #define CHESS_TYPES_H
@@ -442,7 +441,7 @@ void board::print()
       std::cout << "ZERO";
 
 
-    std::cout << "          WHITE SCORE: ";
+    std::cout << "    ||    WHITE SCORE: ";
     if(white_score)
       std::cout << std::setw(4) << white_score;
     else
@@ -515,7 +514,7 @@ void board::print()
         }
 
       }
-      std::cout << RESET << " " << (char)(65+x) << "   ";
+      std::cout << RESET << " " << (char)(65+x) << "  ";
       // std::cout << T_WHITE << B_YELLOW << "| " << RESET;
 
       //white graveyard (killed black pieces)
