@@ -124,6 +124,8 @@ typedef struct board_type
   unsigned char white_captures;
   unsigned char black_captures;
 
+  bool gameover;
+
 
   //
   int num_legal_moves;
@@ -143,6 +145,8 @@ void reset_pieces(board &b)
 {//put all the pieces in their initial locations
 
   b.state = WHITE_TURN;
+
+  b.gameover = false;
 
   b.num_legal_moves = 0;
   b.list_of_moves = NULL;
@@ -528,20 +532,23 @@ void print(board b)
     std::cout << std::setw(4) << b.black_score;
   else
     std::cout << "ZERO";
-  std::cout << "    ";
+
+
+  std::cout << "          WHITE SCORE: ";
+  if(b.white_score)
+    std::cout << std::setw(4) << b.white_score;
+  else
+    std::cout << "ZERO" << std::endl << std::endl;
+
+  std::cout << "          ";
 
   for(unsigned char x = 0; x < 8; x++)
   {
     cout << " " << x + 1 << " ";
   }
 
-  std::cout << "      ";
+  std::cout << "      " << endl;
 
-  std::cout << "WHITE SCORE: ";
-  if(b.white_score)
-    std::cout << std::setw(4) << b.white_score;
-  else
-    std::cout << "ZERO" << std::endl;
 
   color piece_color;
 
@@ -552,22 +559,22 @@ void print(board b)
 
     //black graveyard (killed white pieces)
 
-    std::cout << " " << T_WHITE << B_YELLOW << "| ";
-    std::cout << RESET << " ";
+    // std::cout << " " << T_WHITE << B_YELLOW << "| ";
+    // std::cout << RESET << " ";
 
 
     std::cout << T_MAGENTA << "  " << white_graveyeard[x].content;
     std::cout << RESET << " ";
 
-    std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
+    // std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
 
 
     std::cout << T_MAGENTA << "  " << white_graveyeard[x+8].content;
     std::cout << " " << RESET << " ";
 
 
-    std::cout << " " << T_WHITE << B_YELLOW << "| ";
-    std::cout << RESET << "   ";
+    // std::cout << " " << T_WHITE << B_YELLOW << "| ";
+    // std::cout << RESET << "   ";
 
     std::cout << RESET << (char)(65+x) << " ";
 
@@ -601,36 +608,36 @@ void print(board b)
 
     }
     std::cout << RESET << " " << (char)(65+x) << "   ";
-    std::cout << T_WHITE << B_YELLOW << "| " << RESET;
+    // std::cout << T_WHITE << B_YELLOW << "| " << RESET;
 
     //white graveyard (killed black pieces)
 
-    std::cout << T_RED << "   " << black_graveyeard[x].content;
+    std::cout << T_RED << black_graveyeard[x].content;
     std::cout << RESET << " ";
-    std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
+    // std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
 
 
 
     std::cout << T_RED << "  " << black_graveyeard[x+8].content;
     std::cout << " " << RESET << " ";
 
-    std::cout << " " << T_WHITE << B_YELLOW << "| ";
+    // std::cout << " " << T_WHITE << B_YELLOW << "| ";
     std::cout << RESET << " ";
 
 
     std::cout << RESET <<std::endl;
   }
 
-  std::cout << " " << T_WHITE << B_YELLOW << "________________ ";
+  // std::cout << " " << T_WHITE << B_YELLOW << "________________ ";
 
-  std::cout << RESET <<"      ";
+  std::cout << RESET <<"            ";
 
   for(unsigned char x = 0; x < 8; x++)
   {
     cout << " " << x + 1 << " ";
   }
 
-  std::cout << "    " << T_WHITE << B_YELLOW << "________________ ";
+  // std::cout << "    " << T_WHITE << B_YELLOW << "________________ ";
 
 
   std::cout << RESET <<std::endl << std::endl;
