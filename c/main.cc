@@ -1,4 +1,5 @@
 #include <iostream>
+#include "colors.h"
 
 
 typedef enum piece_type
@@ -18,6 +19,7 @@ typedef enum piece_type
 typedef enum color_type
 {
 
+  NONE,
   BLACK,
   WHITE
 
@@ -74,6 +76,21 @@ void set_contents(board_node &node, piece current_contents_in)
 
 //THE BOARD
 
+typedef struct action_type
+{
+    piece actor;          //who's moving?
+    piece capture;         //who's died?
+
+    unsigned char orig_x; //where are you coming from?
+    unsigned char orig_y;
+
+    unsigned char dest_x; //where are you going / capturing?
+    unsigned char dest_y;
+
+    bool make_queen;      //pawn makes it to the other side
+
+} action;
+
 typedef enum board_state_type
 {
 
@@ -95,6 +112,15 @@ typedef struct board_type
 
   board_node * A1_ptr; // "head" - i.e. where's the origin (0,0)
   board_node * H8_ptr; // "tail"
+
+  //for checking stalemate condtion
+  unsigned char turns_since_white_capture;
+  unsigned char turns_since_black_capture;
+
+  //
+  int num_legal_moves;
+  action * list_of_moves;
+
 
 } board;
 
@@ -194,28 +220,15 @@ board get_a_board()
 //result odd/even?
 //sets the addresses then based on odd/even loc, alternating direction per row
 
-    unsigned char loc8 = y = loc/8;
-    unsigned char base = loc8 * 8;  //use the result of the integer division
-
-    unsigned char offset = loc % 8;
-
-    if(isodd(loc8))
-//  0 -  7 returns 0, 16 - 23 returns 2, 32 - 39 returns 4, 48 - 55 returns 6
-//  8 - 15 returns 1, 24 - 31 returns 3, 40 - 47 return  5, 56 - 63 returns 7
-    {  // -> odd rows are H to A (7 to 0)
-      x = base - offset;
-    }
-    else
-    {  // -> even rows are A to H (0 to 7)
-      x = base + offset;
-    }
-
+    unsigned char loc8 = y = loc/8; //what row
+    unsigned char offset = loc % 8; //what column
 
     //starting information for the square
-    set_dimension(*current_node, x, y);   //A1 is (x, y) = (0, 0)
+    set_dimension(*current_node, offset, loc8);   //A1 is (x, y) = (0, 0)
 
+    unsigned char temp = loc + (loc8 % 2);
 
-    if(isodd(loc))  //easy check
+    if(isodd(temp))
       set_color(*current_node, BLACK);
     else
       set_color(*current_node, WHITE);
@@ -234,6 +247,9 @@ board get_a_board()
 
   temp.A1_ptr = temp_head;
 
+  temp.turns_since_white_capture = 0;
+  temp.turns_since_black_capture = 0;
+
   reset_pieces(temp);
 
   return temp;
@@ -246,7 +262,8 @@ void print(board b)
   typedef struct space_type
   {
 
-    color c;
+    color c_board;
+    color c_piece;
     char content;
 
   } space;
@@ -259,35 +276,72 @@ void print(board b)
 //reformat the data
   for (int loc = 0; loc < 64; loc++)
   {
-    board[ current->x ][ current->y ].c = current->square_color;
+    board[ current->x ][ current->y ].c_board = current->square_color;
 
-    switch(current->current_contents)
+    piece temp = current->current_contents;
+
+    switch(temp)
     {
 
       case EMPTY:
-        board[ current->x ][ current->y ].content = ' '; break;
+        board[ current->x ][ current->y ].content = ' ';
+        board[ current->x ][ current->y ].c_piece = NONE;
+        break;
       case WHITE_PAWN:
       case BLACK_PAWN:
-        board[ current->x ][ current->y ].content = 'p'; break;
+        board[ current->x ][ current->y ].content = 'p';
+        if(temp == WHITE_PAWN)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
       case WHITE_KNIGHT:
       case BLACK_KNIGHT:
-        board[ current->x ][ current->y ].content = 'k'; break;
+        board[ current->x ][ current->y ].content = 'k';
+        if(temp == WHITE_KNIGHT)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
       case WHITE_BISHOP_C:
       case WHITE_BISHOP_F:
       case BLACK_BISHOP_C:
       case BLACK_BISHOP_F:
-        board[ current->x ][ current->y ].content = 'b'; break;
+        board[ current->x ][ current->y ].content = 'b';
+        if(temp == WHITE_BISHOP_C || temp == WHITE_BISHOP_F)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
       case WHITE_ROOK:
       case BLACK_ROOK:
-        board[ current->x ][ current->y ].content = 'R'; break;
+        board[ current->x ][ current->y ].content = 'R';
+        if(temp == WHITE_ROOK)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
       case WHITE_QUEEN:
       case BLACK_QUEEN:
-        board[ current->x ][ current->y ].content = 'Q'; break;
+        board[ current->x ][ current->y ].content = 'Q';
+        if(temp == WHITE_QUEEN)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
+        break;
       case WHITE_KING:
       case BLACK_KING:
-        board[ current->x ][ current->y ].content = 'K'; break;
+        board[ current->x ][ current->y ].content = 'K';
+        if(temp == WHITE_KING)
+          board[ current->x ][ current->y ].c_piece = WHITE;
+        else
+          board[ current->x ][ current->y ].c_piece = BLACK;
+        break;
       default:
-        board[ current->x ][ current->y ].content = ' '; break;
+        board[ current->x ][ current->y ].content = ' ';
+        board[ current->x ][ current->y ].c_piece = NONE;
+        break;
 
     }
     current = current->next;
@@ -295,21 +349,52 @@ void print(board b)
 
   std::cout << std::endl;
 
+  color piece_color;
+
   int n = 0;
 
-  for(unsigned char x = 7; x >= 0; x = x - 1)
+  for(unsigned char x = 0; x < 8; x++)
   {
-    for(unsigned char y = 0; y < 8; y = y + 1)
+    for(unsigned char y = 0; y < 8; y++)
     {
-      // std::cout << " " << n  << ": "<< board[x][y].content << " ";  n++;
+
+      if(board[x][y].c_board == BLACK)
+      {
+        if(board[x][y].c_piece == BLACK)
+          std::cout << T_RED;
+        else if (board[x][y].c_piece == WHITE)
+          std::cout << T_MAGENTA;
+
+
+        std::cout << B_BLACK;
+        std::cout << " "<< board[x][y].content << " " << RESET;
+        n++;
+      }
+      else
+      {
+
+        if(board[x][y].c_piece == BLACK)
+          std::cout << T_RED;
+        else if (board[x][y].c_piece == WHITE)
+          std::cout << T_MAGENTA;
+
+        std::cout << B_WHITE << " "<< board[x][y].content << " " << RESET;
+        n++;
+      }
+
       // std::cout << " " << n  << ": "<< "k" << " ";  n++;
       // std::cout << x << y;
 
     }
-    std::cout << std::endl;
+    std::cout << RESET << "    column " << (char)(65+x) << std::endl;
   }
 
-  std::cout << std::endl;
+  for(unsigned char x = 0; x < 8; x++)
+  {
+    cout << " " << x + 1 << " ";
+  }
+
+  std::cout << RESET <<std::endl;
 
 }
 
