@@ -1,48 +1,9 @@
 #include "colors.h"
+#include "chess_types.h"
+
 #include <iostream>
 #include <iomanip>
 
-
-typedef enum piece_type
-{
-
-  EMPTY,
-                            //BISHOP C starts on C, F on F
-  WHITE_PAWN, WHITE_KNIGHT, WHITE_BISHOP_C, WHITE_BISHOP_F, WHITE_ROOK,
-  BLACK_PAWN, BLACK_KNIGHT, BLACK_BISHOP_C, BLACK_BISHOP_F, BLACK_ROOK,
-
-  WHITE_QUEEN, WHITE_KING,
-  BLACK_QUEEN, BLACK_KING
-
-} piece;
-
-
-typedef enum color_type
-{
-
-  NONE,
-  BLACK,
-  WHITE
-
-} color;
-
-
-
-typedef struct board_node_type
-{
-
-  unsigned char x;      // how far are we along A to H (0 to 7)
-  unsigned char y;      // how far are we along 1 to 8 (0 to 7)
-
-  struct board_node_type * next;
-  struct board_node_type * prev;
-
-  piece current_contents;           // what's in the square
-  color square_color;
-
-} board_node;
-
-//can now declare a board_node
 
 
 
@@ -77,67 +38,17 @@ void set_contents(board_node &node, piece current_contents_in)
 
 //THE BOARD
 
-typedef struct action_type
+
+
+
+bool is_on_board(int dimension_x, int dimension_y)
 {
-    piece actor;          //who's moving?
-    piece capture;         //who's died?
+  if(dimension_x > 7 || dimension_x < 0 || dimension_y > 7 || dimension_y < 0)
+    return false;
+  else
+    return true;
+}
 
-    unsigned char orig_x; //where are you coming from?
-    unsigned char orig_y;
-
-    unsigned char dest_x; //where are you going / capturing?
-    unsigned char dest_y;
-
-    bool make_queen;      //pawn makes it to the other side
-
-} action;
-
-typedef enum board_state_type
-{
-
-  WHITE_TURN,
-  BLACK_TURN,
-
-  WHITE_VICTORY,
-  BLACK_VICTORY,
-
-  STALEMATE
-
-} board_state;
-
-
-typedef struct board_type
-{
-
-  board_state state; // what's going on?
-
-  board_node * A1_ptr; // "head" - i.e. where's the origin (0,0)
-  board_node * H8_ptr; // "tail"
-
-  //for checking stalemate condtion
-  unsigned char turns_since_white_capture;
-  unsigned char turns_since_black_capture;
-
-  unsigned char white_score;
-  unsigned char black_score;
-
-  unsigned char white_captures;
-  unsigned char black_captures;
-
-  bool gameover;
-
-
-  //
-  int num_legal_moves;
-  action * list_of_moves;
-
-  board_node dead_white_guys[16];
-  board_node dead_black_guys[16];
-
-
-
-
-} board;
 
 
 //expects an initialized board (all spaces populated)
@@ -300,14 +211,6 @@ board get_a_board()
 }
 
 
-typedef struct space_type
-{
-
-  color c_board;
-  color c_piece;
-  char content;
-
-} space;
 
 
 
@@ -497,6 +400,18 @@ void print(board b)
       std::cout <<  "    IT\'S BLACK\'S TURN   ";
       break;
 
+    case WHITE_TURN_IN_CHECK:
+      std::cout << "    ";
+      std::cout << B_WHITE << T_BLACK;
+      std::cout <<  "    IT\'S WHITE\'S TURN   - P.S. YOU\'RE  IN CHECK";
+      break;
+    case BLACK_TURN_IN_CHECK:
+
+      std::cout << "    ";
+      std::cout << B_BLACK << T_WHITE;
+      std::cout <<  "    IT\'S BLACK\'S TURN   - P.S. YOU\'RE  IN CHECK";
+      break;
+
     case WHITE_VICTORY:
       std::cout << "            ";
       std::cout << T_BLACK << B_WHITE;
@@ -512,9 +427,9 @@ void print(board b)
 
 
     case STALEMATE:
-        std::cout << "            ";
-        std::cout << T_RED << B_BLUE;
-        std::cout << "     STALEMATE  ";
+      std::cout << "            ";
+      std::cout << T_RED << B_BLUE;
+      std::cout << "     STALEMATE  ";
       break;//maybe do a win by points thing
 
     default:
