@@ -124,6 +124,15 @@ void board::reset_pieces()
 {//put all the pieces in their initial locations
 
   state = WHITE_TURN;
+  // state = BLACK_TURN;
+
+  // state = WHITE_TURN_IN_CHECK;
+  // state = BLACK_TURN_IN_CHECK;
+
+  // state = BLACK_VICTORY;
+  // state = WHITE_VICTORY;
+
+
 
   gameover = false;
 
@@ -376,63 +385,9 @@ void board::print()
     }
 
 
-    std::cout << std::endl << RESET;
-
-    switch (state) {
-
-      case WHITE_TURN:
-        std::cout << "    ";
-        std::cout << B_WHITE << T_BLACK;
-        std::cout <<  "    IT\'S WHITE\'S TURN   ";
-        break;
-      case BLACK_TURN:
-
-        std::cout << "    ";
-        std::cout << B_BLACK << T_WHITE;
-        std::cout <<  "    IT\'S BLACK\'S TURN   ";
-        break;
-
-      case WHITE_TURN_IN_CHECK:
-        std::cout << "    ";
-        std::cout << B_WHITE << T_BLACK;
-        std::cout <<  "    IT\'S WHITE\'S TURN   - P.S. YOU\'RE  IN CHECK";
-        break;
-      case BLACK_TURN_IN_CHECK:
-
-        std::cout << "    ";
-        std::cout << B_BLACK << T_WHITE;
-        std::cout <<  "    IT\'S BLACK\'S TURN   - P.S. YOU\'RE  IN CHECK";
-        break;
-
-      case WHITE_VICTORY:
-        std::cout << "            ";
-        std::cout << T_BLACK << B_WHITE;
-        std::cout << "     WHITE WINS  ";
-        break;
-
-      case BLACK_VICTORY:
-
-        std::cout << "            ";
-        std::cout << T_WHITE << B_BLACK;
-        std::cout << "     BLACK WINS  ";
-        break;
-
-
-      case STALEMATE:
-        std::cout << "            ";
-        std::cout << T_RED << B_BLUE;
-        std::cout << "     STALEMATE  ";
-        break;//maybe do a win by points thing
-
-      default:
-
-        std::cout << "            ";
-        std::cout << T_RED << B_BLACK;
-        std::cout << "     SOMETHING\'S FUCKED  ";
-        break;
-    }
 
     std::cout << RESET << std::endl;
+     //"----------------------------------------------";
 
     std::cout << std::endl << " BLACK SCORE: ";
     if(black_score)
@@ -441,20 +396,21 @@ void board::print()
       std::cout << "ZERO";
 
 
-    std::cout << "    ||    WHITE SCORE: ";
+    std::cout << "       ||       WHITE SCORE: ";
     if(white_score)
       std::cout << std::setw(4) << white_score;
     else
       std::cout << "ZERO" << std::endl << std::endl;
+      //<< "----------------------------------------------" << std::endl;
 
-    std::cout << "          ";
+    std::cout << "-------------";
 
     for(unsigned char x = 0; x < 8; x++)
     {
       cout << " " << x + 1 << " ";
     }
 
-    std::cout << "      " << endl;
+    std::cout << "  -------------" << endl;
 
 
     color piece_color;
@@ -467,17 +423,20 @@ void board::print()
       //black graveyard (killed white pieces)
 
       // std::cout << " " << T_WHITE << B_YELLOW << "| ";
-      // std::cout << RESET << " ";
+      // std::cout << RESET << " |";
+      std::cout << RESET << "\\";
 
 
-      std::cout << T_MAGENTA << "  " << white_graveyeard[x].content;
-      std::cout << RESET << " ";
+
+
+      std::cout << T_MAGENTA << " "<< white_graveyeard[x].content;
+      std::cout << RESET;
 
       // std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
 
 
-      std::cout << T_MAGENTA << "  " << white_graveyeard[x+8].content;
-      std::cout << " " << RESET << " ";
+      std::cout << " / \\ " << T_MAGENTA << white_graveyeard[x+8].content;
+      std::cout << " " << RESET << "/ ";
 
 
       // std::cout << " " << T_WHITE << B_YELLOW << "| ";
@@ -514,22 +473,24 @@ void board::print()
         }
 
       }
-      std::cout << RESET << " " << (char)(65+x) << "  ";
+      std::cout << RESET << " " << (char)(65+x) << " \\ ";
       // std::cout << T_WHITE << B_YELLOW << "| " << RESET;
 
       //white graveyard (killed black pieces)
 
       std::cout << T_RED << black_graveyeard[x].content;
-      std::cout << RESET << " ";
+      std::cout << RESET;
       // std::cout << " " << T_WHITE << B_YELLOW << "_" << RESET;
 
 
 
-      std::cout << T_RED << "  " << black_graveyeard[x+8].content;
-      std::cout << " " << RESET << " ";
+      std::cout << " / \\ " << T_RED  << black_graveyeard[x+8].content;
+      std::cout << " " << RESET;
 
       // std::cout << " " << T_WHITE << B_YELLOW << "| ";
-      std::cout << RESET << " ";
+      // std::cout << RESET << "|";
+      std::cout << RESET << "/";
+
 
 
       std::cout << RESET <<std::endl;
@@ -537,17 +498,86 @@ void board::print()
 
     // std::cout << " " << T_WHITE << B_YELLOW << "________________ ";
 
-    std::cout << RESET <<"            ";
+    std::cout << RESET;
+
+
+    std::cout << "-------------  ";
 
     for(unsigned char x = 0; x < 8; x++)
     {
       cout << " " << x + 1 << " ";
     }
 
+    std::cout << "-------------" << endl;
+
+
     // std::cout << "    " << T_WHITE << B_YELLOW << "________________ ";
 
 
-    std::cout << RESET <<std::endl << std::endl;
+    std::cout << RESET << std::endl;
+
+    // std::cout << "----------------------------------------------" << std::endl;
+
+    std::cout << RESET;
+
+    switch (state) {
+
+      case WHITE_TURN:
+        std::cout << "              ";
+        std::cout << B_WHITE << T_BLACK;
+        std::cout <<  "    IT\'S WHITE\'S TURN   ";
+        break;
+      case BLACK_TURN:
+
+        std::cout << "              ";
+        std::cout << B_BLACK << T_WHITE;
+        std::cout <<  "    IT\'S BLACK\'S TURN   ";
+        break;
+
+      case WHITE_TURN_IN_CHECK:
+        std::cout << "   ";
+        std::cout << B_WHITE << T_BLACK;
+        std::cout <<  " IT\'S WHITE\'S TURN - P.S. YOU\'RE  IN CHECK";
+        break;
+      case BLACK_TURN_IN_CHECK:
+
+        std::cout << "   ";
+        std::cout << B_BLACK << T_WHITE;
+        std::cout <<  " IT\'S BLACK\'S TURN - P.S. YOU\'RE  IN CHECK";
+        break;
+
+      case WHITE_VICTORY:
+        std::cout << "                ";
+        std::cout << T_BLACK << B_WHITE;
+        std::cout << "     WHITE WINS     ";
+        break;
+
+      case BLACK_VICTORY:
+
+        std::cout << "                ";
+        std::cout << T_WHITE << B_BLACK;
+        std::cout << "     BLACK WINS     ";
+        break;
+
+
+      case STALEMATE:
+        std::cout << "            ";
+        std::cout << T_RED << B_BLUE;
+        std::cout << "     STALEMATE  ";
+        break;//maybe do a win by points thing
+
+      default:
+
+        std::cout << "            ";
+        std::cout << T_RED << B_BLACK;
+        std::cout << "     SOMETHING\'S FUCKED  ";
+        break;
+    }
+
+
+
+    std::cout << RESET << std::endl << std::endl;
+    // std::cout << "----------------------------------------------" << std::endl;
 
 
 }
